@@ -1,27 +1,27 @@
 #include "Simple_Graph.h"
 
-void Simple_Graph:: MakeEmptyGraph(int n)
+void Simple_Graph:: makeEmptyGraph(int n)
 {
 
 }
 
-bool Simple_Graph:: IsAdjacent(int u,int v)
+bool Simple_Graph:: isAdjacent(int u,int v)
 {
     return true;
 }
 
-list<int> Simple_Graph:: GetAdjList(int u)
+list<int> Simple_Graph:: getAdjList(int u)
 {
     list<int> stam;
     return stam;
 }
 
-void Simple_Graph:: AddEdge(int u,int v)
+void Simple_Graph:: addEdge(int u,int v)
 {
 
 }
 
-bool Simple_Graph:: RemoveEdge(int u,int v)
+bool Simple_Graph:: removeEdge(int u,int v)
 {
     return false;
 }
@@ -40,5 +40,5 @@ list<tree> Simple_Graph:: DFSTrees(list<int> listWorkingOrder)
 
 Simple_Graph Simple_Graph:: makeTransposeGraph()
 {
-
+    return;
 }

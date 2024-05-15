@@ -4,6 +4,7 @@
 #include <list>
 #include "tree.h"
 #include <iostream>
+
 using namespace std;
 
 class Simple_Graph{
@@ -13,11 +14,11 @@ private:
     list<list<int> > adjacentList;
 
 public:
-    void MakeEmptyGraph(int n);
-    bool IsAdjacent(int u,int v);
-    list<int> GetAdjList(int u);
-    void AddEdge(int u,int v);
-    bool RemoveEdge(int u,int v);
+    void makeEmptyGraph(int n);
+    bool isAdjacent(int u,int v);
+    list<int> getAdjList(int u);
+    void addEdge(int u,int v);
+    bool removeEdge(int u,int v);
     list<int> DFSEndList();
     list<tree> DFSTrees(list<int> listWorkingOrder);
     Simple_Graph makeTransposeGraph();

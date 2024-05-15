@@ -1,11 +1,22 @@
 #ifndef SUPER_GRAPH_ALGORITHM_ASSIGNMENT_TREE_H
 #define SUPER_GRAPH_ALGORITHM_ASSIGNMENT_TREE_H
 
+#include <iostream>
+#include <list>
+#include "node.h"
 
-class tree{
-    int stam;
+using namespace std;
 
+class tree {
+private:
+    node* root;
 
+public:
+    tree();
+    ~tree();
+    node* getRoot();
+    void setRoot(node* node);
+    bool isTreeEmpty();
 };
 
 
