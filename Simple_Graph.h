@@ -6,8 +6,7 @@
 #include <iostream>
 using namespace std;
 
-class Simple_Graph
-{
+class Simple_Graph{
 private:
     int vertices;//n
     int edges;//m

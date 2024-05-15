@@ -1,7 +1,11 @@
 #include <iostream>
+#include "Simple_Graph.h"
+using namespace std;
 
 int main()
 {
-    std::cout << "Hello, World!" << std::endl;
+    Simple_Graph G;
+    cout << "Hello, World!" << endl;
+
     return 0;
 }
