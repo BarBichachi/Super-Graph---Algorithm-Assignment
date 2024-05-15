@@ -128,6 +128,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Simple_Graph.cpp" />
+    <ClCompile Include="tree.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Simple_Graph.h" />
+    <ClInclude Include="tree.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="tree.h" />
