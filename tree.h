@@ -1,0 +1,14 @@
+//
+// Created by Jonathan Poran on 15/05/2024.
+//
+
+#ifndef SUPER_GRAPH_ALGORITHM_ASSIGNMENT_TREE_H
+#define SUPER_GRAPH_ALGORITHM_ASSIGNMENT_TREE_H
+
+
+class tree {
+
+};
+
+
+#endif //SUPER_GRAPH_ALGORITHM_ASSIGNMENT_TREE_H
