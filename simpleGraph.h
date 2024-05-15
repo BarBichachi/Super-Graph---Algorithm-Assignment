@@ -3,25 +3,26 @@
 
 #include <list>
 #include "tree.h"
+#include "vertex.h"
 #include <iostream>
 
 using namespace std;
 
-class Simple_Graph{
+class simpleGraph{
 private:
-    int vertices;//n
-    int edges;//m
-    list<list<int> > adjacentList;
+    int numOfVertices; //n
+    int numOfEdges; //m
+    list<vertex> verticesList;
 
 public:
-    void makeEmptyGraph(int n);
-    bool isAdjacent(int u,int v);
-    list<int> getAdjList(int u);
+    void makeEmptyGraph(int numOfVertices);
+    bool isAdjacent(int vertexSource,int vertexDestination);
+    list<int> getAdjacentList(int u);
     void addEdge(int u,int v);
     bool removeEdge(int u,int v);
     list<int> DFSEndList();
     list<tree> DFSTrees(list<int> listWorkingOrder);
-    Simple_Graph makeTransposeGraph();
+    simpleGraph makeTransposeGraph();
 
 };
 

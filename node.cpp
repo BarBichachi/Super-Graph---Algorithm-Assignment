@@ -12,6 +12,7 @@ node::~node()
         delete child;
     }
 }
+
 int node::getData()
 {
     return data;

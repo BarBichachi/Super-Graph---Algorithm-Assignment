@@ -1,0 +1,10 @@
+#ifndef SUPER_GRAPH_ALGORITHM_ASSIGNMENT_COLOR_H
+#define SUPER_GRAPH_ALGORITHM_ASSIGNMENT_COLOR_H
+
+enum class eColors { 
+	White, 
+	Gray, 
+	Black 
+};
+
+#endif // SUPER_GRAPH_ALGORITHM_ASSIGNMENT_COLOR_H
