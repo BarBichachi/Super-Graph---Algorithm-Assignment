@@ -12,11 +12,10 @@ private:
     node* root;
 
 public:
-    tree();
-    ~tree();
-    node* getRoot();
-    void setRoot(node* node);
-    bool isTreeEmpty();
+    tree(node* root) { this->root = root; };
+    ~tree() { delete root;};
+    node* getRoot() { return root; };
+    bool isTreeEmpty() { return root == nullptr; };
 };
 
 

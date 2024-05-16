@@ -1,10 +1,11 @@
 #include "vertex.h"
 
-vertex::vertex(int value)
+vertex::vertex(int value, int desiredRootValue)
 {
 	data = value;
     vertexColor = eColors::White;
 	vertexEdges.empty();
+    myRootValue = desiredRootValue;
 }
 
 int vertex::getData()

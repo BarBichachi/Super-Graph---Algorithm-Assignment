@@ -2,28 +2,33 @@
 #define SUPER_GRAPH_ALGORITHM_ASSIGNMENT_SIMPLE_GRAPH_H
 
 #include <list>
+#include <iostream>
 #include "tree.h"
 #include "vertex.h"
-#include <iostream>
+#include "edges.h"
 
 using namespace std;
 
 class simpleGraph{
 private:
-    int numOfVertices; //n
-    int numOfEdges; //m
+    int numOfVertices; // n
+    int numOfEdges; // m
     list<vertex> verticesList;
 
 public:
     void makeEmptyGraph(int numOfVertices);
+    void addVertex(int i);
+    void makeWhiteGraph();
     bool isAdjacent(int vertexSource,int vertexDestination);
-    list<int> getAdjacentList(int u);
-    void addEdge(int u,int v);
-    bool removeEdge(int u,int v);
+    void addEdge(int vertexSourceValue, int vertexDestinationValue);
+    bool removeEdge(int vertexSourceValue, int vertexDestinationValue);
     list<int> DFSEndList();
-    list<tree> DFSTrees(list<int> listWorkingOrder);
-    simpleGraph makeTransposeGraph();
-
+    void visitVertexAddToList(vertex &currentVertex, list<int>& endList);
+    list<tree> DFSTrees(list<int> listWorkingOrder, simpleGraph& superGraph);
+    void visitVertexAddToTree(vertex& currentVertex, node& currentVertexNode, int rootValue, simpleGraph& superGraph);
+    simpleGraph makeTransposeGraph(list<int> endList);
+    list<int> stronglyConnectedComponents(list<tree> DFSTrees);
+    list<int> kosarajuSharirAlgorithm();
 };
 
 
