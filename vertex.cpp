@@ -4,7 +4,6 @@ vertex::vertex(int value, int desiredRootValue)
 {
 	data = value;
     vertexColor = eColors::White;
-	vertexEdges.empty();
     myRootValue = desiredRootValue;
 }
 
@@ -18,7 +17,7 @@ int vertex::getNumOfEdges()
 	return vertexEdges.size();
 }
 
-list<vertex*> vertex::getEdgesList()
+list<vertex*>& vertex::getEdgesList()
 {
 	return vertexEdges;
 }

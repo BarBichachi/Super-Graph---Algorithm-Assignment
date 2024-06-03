@@ -24,11 +24,12 @@ public:
     bool removeEdge(int vertexSourceValue, int vertexDestinationValue);
     list<int> DFSEndList();
     void visitVertexAddToList(vertex &currentVertex, list<int>& endList);
-    list<tree> DFSTrees(list<int> listWorkingOrder, simpleGraph& superGraph);
+    list<tree*> DFSTrees(list<int> listWorkingOrder, simpleGraph& superGraph);
     void visitVertexAddToTree(vertex& currentVertex, node& currentVertexNode, int rootValue, simpleGraph& superGraph);
     simpleGraph makeTransposeGraph(list<int> endList);
-    list<int> stronglyConnectedComponents(list<tree> DFSTrees);
-    list<int> kosarajuSharirAlgorithm();
+    list<int> stronglyConnectedComponents(list<tree*> DFSTrees);
+    simpleGraph& makeSuperGraphKSAlgo();
+    void printGraph();
 };
 
 

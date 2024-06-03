@@ -137,7 +137,6 @@
   <ItemGroup>
     <ClInclude Include="colors.h" />
     <ClInclude Include="edges.h" />
-    <ClInclude Include="main.h" />
     <ClInclude Include="node.h" />
     <ClInclude Include="simpleGraph.h" />
     <ClInclude Include="tree.h" />

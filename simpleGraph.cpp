@@ -20,7 +20,7 @@ void simpleGraph::addVertex(int dataOfVertex)
 
 void simpleGraph::makeWhiteGraph()
 {
-	for (auto currentVertex : verticesList)
+	for (auto& currentVertex : verticesList)
 	{
 		currentVertex.vertexColor = eColors::White;
 	}
@@ -40,6 +40,7 @@ bool simpleGraph::isAdjacent(int vertexSourceValue, int vertexDestinationValue)
 			return true;
 		}
 	}
+
 	return false;
 }
 
@@ -108,7 +109,7 @@ list<int> simpleGraph::DFSEndList()
 {
 	list<int> endList;
 
-	for (auto currentVertex : verticesList)
+	for (auto& currentVertex : verticesList)
 	{
 		if (currentVertex.vertexColor == eColors::White)
 		{
@@ -136,9 +137,9 @@ void simpleGraph::visitVertexAddToList(vertex& currentVertex, list<int>& endList
 	endList.push_back(currentVertex.getData());
 }
 
-list<tree> simpleGraph::DFSTrees(list<int> listWorkingOrder, simpleGraph& superGraph)
+list<tree*> simpleGraph::DFSTrees(list<int> listWorkingOrder, simpleGraph& superGraph)
 {
-	list<tree> DFSTrees;
+	list<tree*> DFSTrees;
 
 	for (int i = 0; i < numOfVertices; i++)
 	{
@@ -150,11 +151,11 @@ list<tree> simpleGraph::DFSTrees(list<int> listWorkingOrder, simpleGraph& superG
 		if (currentVertex->vertexColor == eColors::White)
 		{
 			currentVertex->myRootValue = currentVertexValue;
-			superGraph.addVertex(currentVertexValue);
 			currentVertex->vertexColor = eColors::Gray;
-			node currentVertexNode(currentVertexValue);
-			tree currentTree(&currentVertexNode);
-			visitVertexAddToTree((*currentVertex), currentVertexNode, currentVertexValue, superGraph);
+			node* currentVertexNode = new node(currentVertexValue);
+			tree* currentTree = new tree(currentVertexNode);
+			superGraph.addVertex(currentVertexValue);
+			visitVertexAddToTree(*currentVertex, *currentVertexNode, currentVertexValue, superGraph);
 			currentVertex->vertexColor = eColors::Black;
 			DFSTrees.push_back(currentTree);
 		}
@@ -194,31 +195,31 @@ simpleGraph simpleGraph::makeTransposeGraph(list<int> endList)
 	simpleGraph transposedGraph;
 	transposedGraph.makeEmptyGraph(numOfVertices);
 
-	for (auto currentVertex : verticesList)
+	for (auto& currentVertex : verticesList)
 	{
 		list<vertex*> vertexNeighborList = currentVertex.getEdgesList();
 
 		for (auto vertexNeighbor : vertexNeighborList)
 		{
-			addEdge(vertexNeighbor->getData(), currentVertex.getData());
+			transposedGraph.addEdge(vertexNeighbor->getData(), currentVertex.getData());
 		}
 	}
 
 	return transposedGraph;
 }
 
-list<int> simpleGraph::stronglyConnectedComponents(list<tree> DFSTrees)
+list<int> simpleGraph::stronglyConnectedComponents(list<tree*> DFSTrees)
 {
 	list<int> connectedComponentsList;
-	for (auto treeRoot : DFSTrees)
+	for (auto& treeRoot : DFSTrees)
 	{
-		connectedComponentsList.push_back(treeRoot.getRoot()->getData());
+		connectedComponentsList.push_back(treeRoot->getRoot()->getData());
 	}
 
 	return connectedComponentsList;
 }
 
-list<int> simpleGraph::kosarajuSharirAlgorithm()
+simpleGraph& simpleGraph::makeSuperGraphKSAlgo()
 {
 	// DFS on G Graph & build endlist
 	list<int> endList = this->DFSEndList();
@@ -227,12 +228,28 @@ list<int> simpleGraph::kosarajuSharirAlgorithm()
 	simpleGraph transposedGraph = this->makeTransposeGraph(endList);
 
 	// DFS on G transpose with reversed endlist
-	simpleGraph superGraph;
-	superGraph.makeEmptyGraph(0);
-	list<tree> thisGraphDFSTreesList = this->DFSTrees(endList, superGraph);
+	simpleGraph* superGraph = new simpleGraph();
+	superGraph->makeEmptyGraph(0);
+	list<tree*> thisGraphDFSTreesList = transposedGraph.DFSTrees(endList, *superGraph);
 
-	// Split the vertices to strongly connected components by the trees from G transpose
-	list<int> stronglyConnectedVertices = stronglyConnectedComponents(thisGraphDFSTreesList);
+	//// Split the vertices to strongly connected components by the trees from G transpose
+	//list<int> stronglyConnectedVertices = stronglyConnectedComponents(thisGraphDFSTreesList);
 
-	return stronglyConnectedVertices;
+	return *superGraph;
+}
+
+void simpleGraph::printGraph()
+{
+	std::cout << "Graph has " << numOfVertices << " vertices and " << numOfEdges << " edges." << std::endl;
+
+	for (auto& currentVertex : verticesList)
+	{
+		std::cout << "Vertex " << currentVertex.getData() << " has edges to: ";
+		list<vertex*> edges = currentVertex.getEdgesList();
+		for (const auto& neighbor : edges)
+		{
+			std::cout << neighbor->getData() << " ";
+		}
+		std::cout << std::endl;
+	}
 }

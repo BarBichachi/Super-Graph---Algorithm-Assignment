@@ -20,7 +20,7 @@ public:
     vertex(int value, int desiredRootValue = -1);
     int getData();
     int getNumOfEdges();
-    list<vertex*> getEdgesList();
+    list<vertex*>& getEdgesList();
     void addNeighbor(vertex* neighborVertex);
     bool removeNeighbor(vertex* neighborVertex);
 };
