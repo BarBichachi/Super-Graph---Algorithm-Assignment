@@ -13,7 +13,7 @@ void simpleGraph::makeEmptyGraph(int desiredNumOfVertices)
 
 void simpleGraph::addVertex(int dataOfVertex)
 {
-	vertex* currentVertex = new vertex(dataOfVertex);
+	auto * currentVertex = new vertex(dataOfVertex);
 	verticesList.push_back((*currentVertex));
 	(this->numOfVertices)++;
 }
@@ -31,7 +31,7 @@ bool simpleGraph::isAdjacent(int vertexSourceValue, int vertexDestinationValue)
 	auto vertexSource = this->verticesList.begin();
 	advance(vertexSource, vertexSourceValue - 1);
 
-	list<vertex*> vertexSourceEdgesList = (*vertexSource).getEdgesList();
+	set<vertex*> vertexSourceEdgesList = (*vertexSource).getEdgesList();
 
 	for (auto vertex : vertexSourceEdgesList)
 	{
@@ -46,25 +46,41 @@ bool simpleGraph::isAdjacent(int vertexSourceValue, int vertexDestinationValue)
 
 void simpleGraph::addEdge(int vertexSourceValue, int vertexDestinationValue)
 {
-	if (vertexDestinationValue > numOfVertices || vertexSourceValue > numOfVertices)
-	{
-		cout << "One of the vertices does not exist in the graph!" << endl;
-	}
-	else if (vertexSourceValue == vertexDestinationValue)
-	{
-		cout << "Can't make an edge from the source vertex to itself!" << endl;
-	}
-	else
-	{
-		auto vertexSource = this->verticesList.begin();
-		advance(vertexSource, vertexSourceValue - 1);
-
-		auto vertexDestination = this->verticesList.begin();
-		advance(vertexDestination, vertexDestinationValue - 1);
-
-		(*vertexSource).addNeighbor(&(*vertexDestination));
-		numOfEdges++;
-	}
+    for (auto& vertexSource : verticesList)
+    {
+        if(vertexSource.getData()==vertexSourceValue)
+        {
+            for (auto& vertexDestination : verticesList)
+            {
+                if(vertexDestination.getData()==vertexDestinationValue)
+                {
+                    vertexSource.addNeighbor(&vertexDestination);
+                    numOfEdges++;
+                    return;
+                }
+            }
+        }
+    }
+    cout << "\n\n problem\n\n";
+//	if (vertexDestinationValue > numOfVertices || vertexSourceValue > numOfVertices)
+//	{
+//		cout << "One of the vertices does not exist in the graph!" << endl;
+//	}
+//	else if (vertexSourceValue == vertexDestinationValue)
+//	{
+//		cout << "Can't make an edge from the source vertex to itself!" << endl;
+//	}
+//	else
+//	{
+//		auto vertexSource = this->verticesList.begin();
+//		advance(vertexSource, vertexSourceValue - 1);
+//
+//		auto vertexDestination = this->verticesList.begin();
+//		advance(vertexDestination, vertexDestinationValue - 1);
+//
+//		(*vertexSource).addNeighbor(&(*vertexDestination));
+//		numOfEdges++;
+//	}
 }
 
 bool simpleGraph::removeEdge(int vertexSourceValue, int vertexDestinationValue)
@@ -123,7 +139,7 @@ list<int> simpleGraph::DFSEndList()
 void simpleGraph::visitVertexAddToList(vertex& currentVertex, list<int>& endList)
 {
 	currentVertex.vertexColor = eColors::Gray;
-	list<vertex*> vertexEdges = currentVertex.getEdgesList();
+	set<vertex*> vertexEdges = currentVertex.getEdgesList();
 
 	for (auto neighborVertex : vertexEdges)
 	{
@@ -167,7 +183,7 @@ list<tree*> simpleGraph::DFSTrees(list<int> listWorkingOrder, simpleGraph& super
 
 void simpleGraph::visitVertexAddToTree(vertex& currentVertex, node& currentVertexNode, int rootValue, simpleGraph& superGraph)
 {
-	list<vertex*> vertexEdges = currentVertex.getEdgesList();
+	set<vertex*> vertexEdges = currentVertex.getEdgesList();
 
 	for (auto neighborVertex : vertexEdges)
 	{
@@ -190,14 +206,14 @@ void simpleGraph::visitVertexAddToTree(vertex& currentVertex, node& currentVerte
 	}
 }
 
-simpleGraph simpleGraph::makeTransposeGraph(list<int> endList)
+simpleGraph simpleGraph::makeTransposeGraph()
 {
 	simpleGraph transposedGraph;
 	transposedGraph.makeEmptyGraph(numOfVertices);
 
 	for (auto& currentVertex : verticesList)
 	{
-		list<vertex*> vertexNeighborList = currentVertex.getEdgesList();
+		set<vertex*> vertexNeighborList = currentVertex.getEdgesList();
 
 		for (auto vertexNeighbor : vertexNeighborList)
 		{
@@ -208,48 +224,34 @@ simpleGraph simpleGraph::makeTransposeGraph(list<int> endList)
 	return transposedGraph;
 }
 
-list<int> simpleGraph::stronglyConnectedComponents(list<tree*> DFSTrees)
-{
-	list<int> connectedComponentsList;
-	for (auto& treeRoot : DFSTrees)
-	{
-		connectedComponentsList.push_back(treeRoot->getRoot()->getData());
-	}
-
-	return connectedComponentsList;
-}
-
 simpleGraph& simpleGraph::makeSuperGraphKSAlgo()
 {
-	// DFS on G Graph & build endlist
+	// DFS on G Graph & build endList
 	list<int> endList = this->DFSEndList();
 
 	// Build G transpose
-	simpleGraph transposedGraph = this->makeTransposeGraph(endList);
+	simpleGraph transposedGraph = this->makeTransposeGraph();
 
-	// DFS on G transpose with reversed endlist
+	// DFS on G transpose with reversed endList
 	simpleGraph* superGraph = new simpleGraph();
 	superGraph->makeEmptyGraph(0);
-	list<tree*> thisGraphDFSTreesList = transposedGraph.DFSTrees(endList, *superGraph);
-
-	//// Split the vertices to strongly connected components by the trees from G transpose
-	//list<int> stronglyConnectedVertices = stronglyConnectedComponents(thisGraphDFSTreesList);
+	list<tree*> treesListOfTransGraph = transposedGraph.DFSTrees(endList, *superGraph);
 
 	return *superGraph;
 }
 
 void simpleGraph::printGraph()
 {
-	std::cout << "Graph has " << numOfVertices << " vertices and " << numOfEdges << " edges." << std::endl;
+	cout << "Graph has " << numOfVertices << " vertices and " << numOfEdges << " edges:" << endl;
 
 	for (auto& currentVertex : verticesList)
 	{
-		std::cout << "Vertex " << currentVertex.getData() << " has edges to: ";
-		list<vertex*> edges = currentVertex.getEdgesList();
+		cout << "Vertex " << currentVertex.getData() << " has edges to: ";
+		set<vertex*> edges = currentVertex.getEdgesList();
 		for (const auto& neighbor : edges)
 		{
-			std::cout << neighbor->getData() << " ";
+			cout << neighbor->getData() << " ";
 		}
-		std::cout << std::endl;
+		cout << std::endl;
 	}
 }

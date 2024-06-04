@@ -5,7 +5,6 @@
 #include <iostream>
 #include "tree.h"
 #include "vertex.h"
-#include "edges.h"
 
 using namespace std;
 
@@ -26,8 +25,7 @@ public:
     void visitVertexAddToList(vertex &currentVertex, list<int>& endList);
     list<tree*> DFSTrees(list<int> listWorkingOrder, simpleGraph& superGraph);
     void visitVertexAddToTree(vertex& currentVertex, node& currentVertexNode, int rootValue, simpleGraph& superGraph);
-    simpleGraph makeTransposeGraph(list<int> endList);
-    list<int> stronglyConnectedComponents(list<tree*> DFSTrees);
+    simpleGraph makeTransposeGraph();
     simpleGraph& makeSuperGraphKSAlgo();
     void printGraph();
 };

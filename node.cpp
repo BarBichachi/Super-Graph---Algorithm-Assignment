@@ -7,39 +7,39 @@ node::node(int value)
 
 node::~node()
 {
-    for (node* child : childrens)
+    for (node* child : children)
     {
         delete child;
     }
 }
 
-int node::getData()
+int node::getData() const
 {
     return data;
 }
 
-int node::getNumOfChildrens()
+int node::getNumOfChildren() const
 {
-    return childrens.size();
+    return (int)children.size();
 }
 
-list<node*> node::getChildrensList()
+list<node*> node::getChildrenList()
 {
-    return childrens;
+    return children;
 }
 
 void node::addChild(node* child)
 {
-    childrens.push_back(child);
+    children.push_back(child);
 }
 
 bool node::removeChild(node* child)
 {
-    for (auto currentNode = childrens.begin(); currentNode != childrens.end(); currentNode++)
+    for (auto currentNode = children.begin(); currentNode != children.end(); currentNode++)
     {
         if (*currentNode == child)
         {
-            childrens.erase(currentNode);
+            children.erase(currentNode);
             return true;
         }
     }

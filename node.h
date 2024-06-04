@@ -9,14 +9,14 @@ using namespace std;
 class node {
 private:
     int data;
-    list<node*> childrens;
+    list<node*> children;
 
 public:
     node(int value);
     ~node();
-    int getData();
-    int getNumOfChildrens();
-    list<node*> getChildrensList();
+    int getData() const;
+    int getNumOfChildren() const;
+    list<node*> getChildrenList();
     void addChild(node* child);
     bool removeChild(node* child);
 };

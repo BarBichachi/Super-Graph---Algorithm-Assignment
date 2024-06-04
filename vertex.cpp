@@ -7,24 +7,24 @@ vertex::vertex(int value, int desiredRootValue)
     myRootValue = desiredRootValue;
 }
 
-int vertex::getData()
+int vertex::getData() const
 {
 	return data;
 }
 
-int vertex::getNumOfEdges()
+int vertex::getNumOfEdges() const
 {
-	return vertexEdges.size();
+	return (int)vertexEdges.size();
 }
 
-list<vertex*>& vertex::getEdgesList()
+set<vertex*>& vertex::getEdgesList()
 {
 	return vertexEdges;
 }
 
 void vertex::addNeighbor(vertex* neighborVertex)
 {
-    vertexEdges.push_back(neighborVertex);
+    vertexEdges.insert(neighborVertex);
 }
 
 bool vertex::removeNeighbor(vertex* neighborVertex)
