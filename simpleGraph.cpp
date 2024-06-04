@@ -200,7 +200,7 @@ void simpleGraph::visitVertexAddToTree(vertex& currentVertex, node& currentVerte
 		{
 			if (neighborVertex->myRootValue != rootValue)
 			{
-				superGraph.addEdge(neighborVertex->getData(), rootValue);
+				superGraph.addEdge(neighborVertex->myRootValue, rootValue);
 			}
 		}
 	}
