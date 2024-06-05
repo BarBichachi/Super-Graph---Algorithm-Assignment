@@ -3,7 +3,6 @@
 
 #include <list>
 #include <iostream>
-#include "tree.h"
 #include "vertex.h"
 
 using namespace std;

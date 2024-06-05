@@ -3,7 +3,7 @@
 
 #include <set>
 #include "colors.h"
-#include "node.h"
+#include <list>
 
 using namespace std;
 
