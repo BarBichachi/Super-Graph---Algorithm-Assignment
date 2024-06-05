@@ -40,15 +40,15 @@ void vertex::addNeighbor(vertex* neighborVertex)
     vertexEdges.push_back(neighborVertex);
 }
 
-bool vertex:: removeNeighbor(vertex* neighborVertex)
+bool vertex::removeNeighbor(vertex* neighborVertex)
 {
-    auto it = find(vertexEdges.begin(), vertexEdges.end(), neighborVertex);
-
-    if (it != vertexEdges.end())
+    for (auto itNeighborVertex = vertexEdges.begin(); itNeighborVertex != vertexEdges.end(); ++itNeighborVertex)
     {
-        vertexEdges.erase(it);
-        return true;
+        if (*itNeighborVertex == neighborVertex)
+        {
+            vertexEdges.erase(itNeighborVertex);
+            return true;
+        }
     }
-
     return false;
 }
