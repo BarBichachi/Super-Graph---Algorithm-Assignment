@@ -9,9 +9,9 @@ vertex::vertex(int value, vertex* myRootVertex)
 
 vertex:: vertex(vertex& copy)
 {
-    this->data=copy.data;
-    this->vertexColor=eColors::White;
-    this->myRootVertex= nullptr;
+    this->data = copy.data;
+    this->vertexColor = eColors::White;
+    this->myRootVertex = copy.myRootVertex;
 }
 
 int vertex::getData() const

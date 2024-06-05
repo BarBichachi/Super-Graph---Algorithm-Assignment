@@ -19,6 +19,17 @@ void simpleGraph::addVertex(vertex& vertexToAdd)
     (this->numOfVertices)++;
 }
 
+vertex* simpleGraph:: findVertexByValue(const int value)
+{
+    for (auto currentVertex : verticesList)
+    {
+        if(currentVertex->getData() == value)
+            return currentVertex;
+    }
+
+    return nullptr;
+}
+
 void simpleGraph::makeWhiteGraph()
 {
 	for (auto& currentVertex : verticesList)
@@ -153,6 +164,7 @@ void simpleGraph:: DFSWithEndListToSuperGraph(list<vertex*>& listWorkingOrder, s
 		if (currentVertex->vertexColor == eColors::White)
 		{
 			currentVertex->vertexColor = eColors::Gray;
+            currentVertex->myRootVertex = currentVertex;
             auto* superGraphVertex = new vertex(*currentVertex);
             superGraph.addVertex(*superGraphVertex);
 
@@ -169,23 +181,23 @@ void simpleGraph:: DFSWithEndListToSuperGraph(list<vertex*>& listWorkingOrder, s
     }
 }
 
-void simpleGraph::visitVertexAddToSuperGraph(list<vertex*>& listNeighbor, vertex& RootVertex, vertex& RootVertexInSuper, simpleGraph& superGraph)
+void simpleGraph::visitVertexAddToSuperGraph(list<vertex*>& listNeighbor, vertex& rootVertex, vertex& rootVertexInSuper, simpleGraph& superGraph)
 {
     for (auto neighborVertex : listNeighbor)//
     {
         if (neighborVertex->vertexColor == eColors::White)
         {
             neighborVertex->vertexColor = eColors::Gray;
-            neighborVertex->myRootVertex = &RootVertex;
-            visitVertexAddToSuperGraph(neighborVertex->getEdgesList(), RootVertex, RootVertexInSuper,superGraph);
+            neighborVertex->myRootVertex = &rootVertex;
+            visitVertexAddToSuperGraph(neighborVertex->getEdgesList(), rootVertex, rootVertexInSuper,superGraph);
             neighborVertex->vertexColor = eColors::Black;
         }
         else if (neighborVertex->vertexColor == eColors::Black)
         {
-            if (neighborVertex->myRootVertex != &RootVertex)
+            if (neighborVertex->myRootVertex != &rootVertex)
             {
-                auto* superGraphVertex = new vertex(*neighborVertex);
-                superGraph.addEdge(*superGraphVertex,RootVertexInSuper);
+                vertex* vertexInSuperGraph = superGraph.findVertexByValue(neighborVertex->myRootVertex->getData());
+                superGraph.addEdge(*vertexInSuperGraph,rootVertexInSuper);
             }
         }
         //else is gray
@@ -210,6 +222,9 @@ void simpleGraph::makeTransposeGraphFrom(simpleGraph* sourceGraph)
             this->numOfEdges++;
 		}
 	}
+
+
+
 }
 
 simpleGraph& simpleGraph::makeSuperGraphKSAlgo()
@@ -243,6 +258,6 @@ void simpleGraph::printGraph()
 		{
 			cout << neighbor->getData() << " ";
 		}
-		cout << std::endl;
+		cout << endl;
 	}
 }

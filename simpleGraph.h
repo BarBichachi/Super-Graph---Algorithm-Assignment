@@ -16,6 +16,7 @@ private:
 public:
     void makeEmptyGraph(int numOfVertices);
     void addVertex(vertex& vertexToAdd);
+    vertex* findVertexByValue(const int value);
     void makeWhiteGraph();
     static bool isAdjacent(vertex& vertexSource, vertex& vertexDestination);
     void addEdgeUI(int vertexSourceValue, int vertexDestinationValue);
