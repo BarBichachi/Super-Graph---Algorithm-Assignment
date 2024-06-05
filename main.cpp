@@ -1,34 +1,28 @@
-#include <iostream>
 #include "simpleGraph.h"
+#include <stdlib.h>
+#include <iostream>
 using namespace std;
 
 int main()
 {
-//    simpleGraph myGraph;
-//    int numVertices, numEdges, sourceVertex, destinationVertex;
-//    cout << "Creating Graph:\nPlease enter the number of vertices: ";
-//    cin >> numVertices;
-//    myGraph.makeEmptyGraph(numVertices);
-//    cout << "Please enter number of edges: ";
-//    cin >> numEdges;
-//    for(int i=0;i<numEdges;i++)
-//    {
-//        cin >> sourceVertex >> destinationVertex;
-//        myGraph.addEdgeUI(sourceVertex, destinationVertex);
-//    }
-
     simpleGraph myGraph;
-    myGraph.makeEmptyGraph(6);
-    myGraph.addEdgeUI(1, 2);
-    myGraph.addEdgeUI(1, 3);
-    myGraph.addEdgeUI(3, 2);
-    myGraph.addEdgeUI(2, 4);
-    myGraph.addEdgeUI(4, 3);
-    myGraph.addEdgeUI(5, 4);
-    myGraph.addEdgeUI(5, 6);
-    myGraph.addEdgeUI(6, 5);
+    int numVertices, numEdges, vertexSourceValue, vertexDestinationValue;
 
-    myGraph.printGraph();
+    cout << "Creating Graph:\nPlease enter the number of vertices: ";
+    cin >> numVertices;
+    myGraph.makeEmptyGraph(numVertices);
+    cout << "Please enter number of edges: ";
+    cin >> numEdges;
+
+    for(int i=0;i<numEdges;i++)
+    {
+        cin >> vertexSourceValue >> vertexDestinationValue;
+        if(!myGraph.addEdgeUI(vertexSourceValue, vertexDestinationValue) )
+        {
+            cout << "invalid input";
+            exit(1);
+        }
+    }
     cout << endl;
 
     simpleGraph superGraph = myGraph.makeSuperGraphKSAlgo();

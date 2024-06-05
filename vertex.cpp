@@ -1,10 +1,10 @@
 #include "vertex.h"
 
-vertex::vertex(int value, vertex* myRootVertex)
+vertex::vertex(int value)
 {
 	data = value;
     vertexColor = eColors::White;
-    myRootVertex = myRootVertex;
+    myRootVertex = nullptr;
 }
 
 vertex:: vertex(vertex& copy)
@@ -13,6 +13,12 @@ vertex:: vertex(vertex& copy)
     this->vertexColor = eColors::White;
     this->myRootVertex = copy.myRootVertex;
 }
+
+vertex:: ~vertex()
+{
+    vertexEdges.clear();
+}
+
 
 int vertex::getData() const
 {
@@ -36,7 +42,7 @@ void vertex::addNeighbor(vertex* neighborVertex)
 
 bool vertex:: removeNeighbor(vertex* neighborVertex)
 {
-    auto it = std::find(vertexEdges.begin(), vertexEdges.end(), neighborVertex);
+    auto it = find(vertexEdges.begin(), vertexEdges.end(), neighborVertex);
 
     if (it != vertexEdges.end())
     {

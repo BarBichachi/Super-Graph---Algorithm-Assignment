@@ -1,10 +1,9 @@
 #ifndef SUPER_GRAPH_ALGORITHM_ASSIGNMENT_VERTEX_H
 #define SUPER_GRAPH_ALGORITHM_ASSIGNMENT_VERTEX_H
 
-#include <set>
 #include "colors.h"
 #include <list>
-
+#include <iostream>
 using namespace std;
 
 class vertex
@@ -17,8 +16,9 @@ public:
     eColors vertexColor;
     vertex* myRootVertex;
 
-    vertex(int value, vertex* myRootVertex = nullptr);
+    vertex(int value);
     vertex(vertex& copy);
+    ~vertex();
     int getData() const;
     int getNumOfEdges() const;
     list<vertex*>& getEdgesList();
