@@ -12,20 +12,22 @@ class simpleGraph{
 private:
     int numOfVertices; // n
     int numOfEdges; // m
-    list<vertex> verticesList;
+    list<vertex*> verticesList;
 
 public:
     void makeEmptyGraph(int numOfVertices);
-    void addVertex(int i);
+    void addVertex(vertex& vertexToAdd);
     void makeWhiteGraph();
-    bool isAdjacent(int vertexSource,int vertexDestination);
-    void addEdge(int vertexSourceValue, int vertexDestinationValue);
-    bool removeEdge(int vertexSourceValue, int vertexDestinationValue);
-    list<int> DFSEndList();
-    void visitVertexAddToList(vertex &currentVertex, list<int>& endList);
-    list<tree*> DFSTrees(list<int> listWorkingOrder, simpleGraph& superGraph);
-    void visitVertexAddToTree(vertex& currentVertex, node& currentVertexNode, int rootValue, simpleGraph& superGraph);
-    simpleGraph makeTransposeGraph();
+    static bool isAdjacent(vertex& vertexSource, vertex& vertexDestination);
+    void addEdgeUI(int vertexSourceValue, int vertexDestinationValue);
+    bool addEdge(vertex& vertexSource, vertex& vertexDestination);
+    bool removeEdge(vertex& vertexSource, vertex& vertexDestination);
+    list<vertex*> DFSEndList(list<vertex*>& endList);
+    list<vertex*> reverseListInMyGraph(list<vertex*>&endList);
+    void visitVertexAddToList(vertex &currentVertex, list<vertex*>& endList);
+    void DFSWithEndListToSuperGraph(list<vertex*>& listWorkingOrder, simpleGraph& superGraph);
+    void visitVertexAddToSuperGraph(list<vertex*>& listNeighbor, vertex& RootVertex, vertex& RootVertexInSuper, simpleGraph& superGraph);
+    void makeTransposeGraphFrom(simpleGraph* sourceGraph);
     simpleGraph& makeSuperGraphKSAlgo();
     void printGraph();
 };

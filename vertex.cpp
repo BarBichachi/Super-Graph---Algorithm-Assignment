@@ -1,10 +1,17 @@
 #include "vertex.h"
 
-vertex::vertex(int value, int desiredRootValue)
+vertex::vertex(int value, vertex* myRootVertex)
 {
 	data = value;
     vertexColor = eColors::White;
-    myRootValue = desiredRootValue;
+    myRootVertex = myRootVertex;
+}
+
+vertex:: vertex(vertex& copy)
+{
+    this->data=copy.data;
+    this->vertexColor=eColors::White;
+    this->myRootVertex= nullptr;
 }
 
 int vertex::getData() const
@@ -17,25 +24,25 @@ int vertex::getNumOfEdges() const
 	return (int)vertexEdges.size();
 }
 
-set<vertex*>& vertex::getEdgesList()
+list<vertex*>& vertex::getEdgesList()
 {
 	return vertexEdges;
 }
 
 void vertex::addNeighbor(vertex* neighborVertex)
 {
-    vertexEdges.insert(neighborVertex);
+    vertexEdges.push_back(neighborVertex);
 }
 
-bool vertex::removeNeighbor(vertex* neighborVertex)
+bool vertex:: removeNeighbor(vertex* neighborVertex)
 {
-    for (auto currentVertex = vertexEdges.begin(); currentVertex != vertexEdges.end(); currentVertex++)
+    auto it = std::find(vertexEdges.begin(), vertexEdges.end(), neighborVertex);
+
+    if (it != vertexEdges.end())
     {
-        if (*currentVertex == neighborVertex)
-        {
-            vertexEdges.erase(currentVertex);
-            return true;
-        }
+        vertexEdges.erase(it);
+        return true;
     }
+
     return false;
 }

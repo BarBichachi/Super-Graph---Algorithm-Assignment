@@ -11,16 +11,17 @@ class vertex
 {
 private:
 	int data;
-    set<vertex*> vertexEdges;
+    list<vertex*> vertexEdges;
 
 public:
     eColors vertexColor;
-    int myRootValue;
+    vertex* myRootVertex;
 
-    explicit vertex(int value, int desiredRootValue = -1);
+    vertex(int value, vertex* myRootVertex = nullptr);
+    vertex(vertex& copy);
     int getData() const;
     int getNumOfEdges() const;
-    set<vertex*>& getEdgesList();
+    list<vertex*>& getEdgesList();
     void addNeighbor(vertex* neighborVertex);
     bool removeNeighbor(vertex* neighborVertex);
 };

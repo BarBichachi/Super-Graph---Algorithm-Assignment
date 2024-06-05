@@ -4,47 +4,31 @@ using namespace std;
 
 int main()
 {
+//    simpleGraph myGraph;
+//    int numVertices, numEdges, sourceVertex, destinationVertex;
+//    cout << "Creating Graph:\nPlease enter the number of vertices: ";
+//    cin >> numVertices;
+//    myGraph.makeEmptyGraph(numVertices);
+//    cout << "Please enter number of edges: ";
+//    cin >> numEdges;
+//    for(int i=0;i<numEdges;i++)
+//    {
+//        cin >> sourceVertex >> destinationVertex;
+//        myGraph.addEdgeUI(sourceVertex, destinationVertex);
+//    }
+
     simpleGraph myGraph;
-    int numVertices, numEdges, sourceVertex, destinationVertex;
-    cout << "Creating Graph:\nPlease enter the number of vertices: ";
-    cin >> numVertices;
-    myGraph.makeEmptyGraph(numVertices);
-    cout << "Please enter number of edges: ";
-    cin >> numEdges;
-    for(int i=0;i<numEdges;i++)
-    {
-        cin >> sourceVertex >> destinationVertex;
-        myGraph.addEdge(sourceVertex, destinationVertex);
-    }
+    myGraph.makeEmptyGraph(6);
+    myGraph.addEdgeUI(1, 2);
+    myGraph.addEdgeUI(1, 3);
+    myGraph.addEdgeUI(3, 2);
+    myGraph.addEdgeUI(2, 4);
+    myGraph.addEdgeUI(4, 3);
+    myGraph.addEdgeUI(5, 4);
+    myGraph.addEdgeUI(5, 6);
+    myGraph.addEdgeUI(6, 5);
 
-
-//    simpleGraph G;
-
-//    G.makeEmptyGraph(7);
-//    G.addEdge(1, 2);
-//    G.addEdge(1, 3);
-//    G.addEdge(2, 1);
-//    G.addEdge(2, 3);
-//    G.addEdge(2, 4);
-//    G.addEdge(2, 5);
-//    G.addEdge(3, 1);
-//    G.addEdge(3, 2);
-//    G.addEdge(3, 6);
-//    G.addEdge(3, 7);
-//    G.addEdge(4, 2);
-//    G.addEdge(5, 2);
-//    G.addEdge(6, 3);
-
-////    G.makeEmptyGraph(6);
-//    G.addEdge(1, 2);
-//    G.addEdge(1, 3);
-//    G.addEdge(3, 2);
-//    G.addEdge(2, 4);
-//    G.addEdge(4, 3);
-//    G.addEdge(5, 4);
-//    G.addEdge(5, 6);
-//    G.addEdge(6, 5);
-//    G.printGraph();
+    myGraph.printGraph();
     cout << endl;
 
     simpleGraph superGraph = myGraph.makeSuperGraphKSAlgo();
