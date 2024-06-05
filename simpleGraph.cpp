@@ -7,35 +7,42 @@ void simpleGraph::makeEmptyGraph(int desiredNumOfVertices)
 
 	for (int i = 1; i <= desiredNumOfVertices; i++)
 	{
-		addVertex(i);
+        auto* currentVertex = new vertex(i);
+        verticesList.push_back((currentVertex));
+        this->numOfVertices++;
 	}
 }
 
-void simpleGraph::addVertex(int dataOfVertex)
+void simpleGraph::addVertex(vertex& vertexToAdd)
 {
-	auto * currentVertex = new vertex(dataOfVertex);
-	verticesList.push_back((*currentVertex));
-	(this->numOfVertices)++;
+    verticesList.push_back(&vertexToAdd);
+    (this->numOfVertices)++;
+}
+
+vertex* simpleGraph:: findVertexByValue(int value)
+{
+    for (auto currentVertex : verticesList)
+    {
+        if(currentVertex->getData() == value)
+            return currentVertex;
+    }
+
+    return nullptr;
 }
 
 void simpleGraph::makeWhiteGraph()
 {
 	for (auto& currentVertex : verticesList)
 	{
-		currentVertex.vertexColor = eColors::White;
+		currentVertex->vertexColor = eColors::White;
 	}
 }
 
-bool simpleGraph::isAdjacent(int vertexSourceValue, int vertexDestinationValue)
+bool simpleGraph::isAdjacent(vertex& vertexSource, vertex& vertexDestination)
 {
-	auto vertexSource = this->verticesList.begin();
-	advance(vertexSource, vertexSourceValue - 1);
-
-	set<vertex*> vertexSourceEdgesList = (*vertexSource).getEdgesList();
-
-	for (auto vertex : vertexSourceEdgesList)
+	for (auto adjacentVertex : vertexSource.getEdgesList())
 	{
-		if (vertex->getData() == vertexDestinationValue)
+		if (adjacentVertex == &vertexDestination)
 		{
 			return true;
 		}
@@ -44,104 +51,74 @@ bool simpleGraph::isAdjacent(int vertexSourceValue, int vertexDestinationValue)
 	return false;
 }
 
-void simpleGraph::addEdge(int vertexSourceValue, int vertexDestinationValue)
+bool simpleGraph::addEdge(vertex& vertexSource, vertex& vertexDestination)
 {
-    for (auto& vertexSource : verticesList)
+    if(!isAdjacent(vertexSource,vertexDestination))
     {
-        if(vertexSource.getData()==vertexSourceValue)
-        {
-            for (auto& vertexDestination : verticesList)
-            {
-                if(vertexDestination.getData()==vertexDestinationValue)
-                {
-                    vertexSource.addNeighbor(&vertexDestination);
-                    numOfEdges++;
-                    return;
-                }
-            }
-        }
+        vertexSource.addNeighbor(&vertexDestination);
+        numOfEdges++;
+        return true;
     }
-    cout << "\n\n problem\n\n";
-//	if (vertexDestinationValue > numOfVertices || vertexSourceValue > numOfVertices)
-//	{
-//		cout << "One of the vertices does not exist in the graph!" << endl;
-//	}
-//	else if (vertexSourceValue == vertexDestinationValue)
-//	{
-//		cout << "Can't make an edge from the source vertex to itself!" << endl;
-//	}
-//	else
-//	{
-//		auto vertexSource = this->verticesList.begin();
-//		advance(vertexSource, vertexSourceValue - 1);
-//
-//		auto vertexDestination = this->verticesList.begin();
-//		advance(vertexDestination, vertexDestinationValue - 1);
-//
-//		(*vertexSource).addNeighbor(&(*vertexDestination));
-//		numOfEdges++;
-//	}
+    else
+        return false;
 }
 
-bool simpleGraph::removeEdge(int vertexSourceValue, int vertexDestinationValue)
+
+bool simpleGraph::addEdgeUI(int vertexSourceValue, int vertexDestinationValue)
 {
-	bool isRemoved = true;
+    if(vertexSourceValue <= 0 || vertexDestinationValue <= 0 ||
+       vertexSourceValue > numOfVertices || vertexDestinationValue > numOfVertices)
+    {
+        cout << "invalid input";
+        exit(1);
+    }
 
-	if (vertexDestinationValue > numOfVertices || vertexSourceValue > numOfVertices)
-	{
-		cout << "One of the vertices does not exist in the graph!" << endl;
-		isRemoved = false;
-	}
-	else if (vertexSourceValue == vertexDestinationValue)
-	{
-		cout << "It's a simple graph, there can't be an edge from a vertex to itself!" << endl;
-		isRemoved = false;
-	}
-	else
-	{
-		auto vertexSource = this->verticesList.begin();
-		advance(vertexSource, vertexSourceValue - 1);
+    vertex* sourcePtr = findVertexByValue(vertexSourceValue);
+    vertex* destinationPtr = findVertexByValue(vertexDestinationValue);
 
-		auto vertexDestination = this->verticesList.begin();
-		advance(vertexDestination, vertexDestinationValue - 1);
+    if(sourcePtr == nullptr || destinationPtr == nullptr)
+    {
+        cout << "invalid input";
+        exit(1);
+    }
 
-		isRemoved = (*vertexSource).removeNeighbor(&(*vertexDestination));
+    return addEdge(*sourcePtr, *destinationPtr);
+}
 
-		if (isRemoved)
-		{
-			numOfEdges--;
-		}
-		else
-		{
-			cout << "This edge does not exist in the graph!" << endl;
-			isRemoved = false;
-		}
-	}
+bool simpleGraph::removeEdge(vertex& vertexSource, vertex& vertexDestination)
+{
+    bool isRemoved = vertexSource.removeNeighbor(&vertexDestination);
+
+    if (isRemoved)
+    {
+        numOfEdges--;
+    }
+    else
+    {
+        cout << "This edge does not exist in the graph!" << endl;
+    }
 
 	return isRemoved;
 }
 
-list<int> simpleGraph::DFSEndList()
+void simpleGraph::DFSEndList(list<int>& endList)
 {
-	list<int> endList;
-
 	for (auto& currentVertex : verticesList)
 	{
-		if (currentVertex.vertexColor == eColors::White)
+		if (currentVertex->vertexColor == eColors::White)
 		{
-			visitVertexAddToList(currentVertex, endList);
+			visitVertexAddToList(*currentVertex, endList);
 		}
 	}
 
-	return endList;
+    this->makeWhiteGraph();
 }
 
 void simpleGraph::visitVertexAddToList(vertex& currentVertex, list<int>& endList)
 {
 	currentVertex.vertexColor = eColors::Gray;
-	set<vertex*> vertexEdges = currentVertex.getEdgesList();
 
-	for (auto neighborVertex : vertexEdges)
+	for (auto neighborVertex : currentVertex.getEdgesList())
 	{
 		if (neighborVertex->vertexColor == eColors::White)
 		{
@@ -153,89 +130,86 @@ void simpleGraph::visitVertexAddToList(vertex& currentVertex, list<int>& endList
 	endList.push_back(currentVertex.getData());
 }
 
-list<tree*> simpleGraph::DFSTrees(list<int> listWorkingOrder, simpleGraph& superGraph)
+void simpleGraph:: DFSWithEndListToSuperGraph(list<int>& listWorkingOrder, simpleGraph& superGraph)
 {
-	list<tree*> DFSTrees;
-
-	for (int i = 0; i < numOfVertices; i++)
+	for (int vertexValue :listWorkingOrder)
 	{
-		int currentVertexValue = listWorkingOrder.back();
-		listWorkingOrder.pop_back();
-		auto currentVertex = this->verticesList.begin();
-		advance(currentVertex, currentVertexValue - 1);
-
+        vertex* currentVertex = this->findVertexByValue(vertexValue);
 		if (currentVertex->vertexColor == eColors::White)
 		{
-			currentVertex->myRootValue = currentVertexValue;
 			currentVertex->vertexColor = eColors::Gray;
-			node* currentVertexNode = new node(currentVertexValue);
-			tree* currentTree = new tree(currentVertexNode);
-			superGraph.addVertex(currentVertexValue);
-			visitVertexAddToTree(*currentVertex, *currentVertexNode, currentVertexValue, superGraph);
+            currentVertex->myRootVertex = currentVertex;
+            auto* superGraphVertex = new vertex(*currentVertex);
+            superGraph.addVertex(*superGraphVertex);
+
+            visitVertexAddToSuperGraph(*currentVertex,*superGraphVertex,superGraph);
+
 			currentVertex->vertexColor = eColors::Black;
-			DFSTrees.push_back(currentTree);
 		}
 		// (else) Vertex is black
 	}
 
-	return DFSTrees;
+    this->makeWhiteGraph();
 }
 
-void simpleGraph::visitVertexAddToTree(vertex& currentVertex, node& currentVertexNode, int rootValue, simpleGraph& superGraph)
+void simpleGraph::visitVertexAddToSuperGraph(vertex& fatherVertex, vertex& rootVertexInSuper, simpleGraph& superGraph)
 {
-	set<vertex*> vertexEdges = currentVertex.getEdgesList();
-
-	for (auto neighborVertex : vertexEdges)
-	{
-		if (neighborVertex->vertexColor == eColors::White)
-		{
-			neighborVertex->vertexColor = eColors::Gray;
-			neighborVertex->myRootValue = rootValue;
-			node* neighborVertexNode = new node(neighborVertex->getData());
-			currentVertexNode.addChild(neighborVertexNode);
-			visitVertexAddToTree((*neighborVertex), (*neighborVertexNode), rootValue, superGraph);
-			neighborVertex->vertexColor = eColors::Black;
-		}
-		else if (neighborVertex->vertexColor == eColors::Black)
-		{
-			if (neighborVertex->myRootValue != rootValue)
-			{
-				superGraph.addEdge(neighborVertex->myRootValue, rootValue);
-			}
-		}
-	}
+    for (auto neighborVertex : fatherVertex.getEdgesList())
+    {
+        if (neighborVertex->vertexColor == eColors::White)
+        {
+            neighborVertex->vertexColor = eColors::Gray;
+            neighborVertex->myRootVertex = fatherVertex.myRootVertex;
+            visitVertexAddToSuperGraph(*neighborVertex, rootVertexInSuper, superGraph);
+            neighborVertex->vertexColor = eColors::Black;
+        }
+        else if (neighborVertex->vertexColor == eColors::Black)
+        {
+            if (neighborVertex->myRootVertex->getData() != rootVertexInSuper.getData())
+            {
+                vertex* vertexInSuperGraph = superGraph.findVertexByValue(neighborVertex->myRootVertex->getData());
+                superGraph.addEdge(*vertexInSuperGraph,rootVertexInSuper);
+            }
+        }
+        //else is gray
+    }
 }
 
-simpleGraph simpleGraph::makeTransposeGraph()
+void simpleGraph::makeTransposeGraphFrom(simpleGraph* sourceGraph)
 {
-	simpleGraph transposedGraph;
-	transposedGraph.makeEmptyGraph(numOfVertices);
+	this->makeEmptyGraph(sourceGraph->numOfVertices);
 
-	for (auto& currentVertex : verticesList)
+	for (auto& sourceVertexInSourceGraph : sourceGraph->verticesList)
 	{
-		set<vertex*> vertexNeighborList = currentVertex.getEdgesList();
+        auto itVertexDestinationTGraph = verticesList.begin();
+        advance(itVertexDestinationTGraph, sourceVertexInSourceGraph->getData()-1);
 
-		for (auto vertexNeighbor : vertexNeighborList)
+		for (auto vertexNeighbor : sourceVertexInSourceGraph->getEdgesList())
 		{
-			transposedGraph.addEdge(vertexNeighbor->getData(), currentVertex.getData());
+            auto itVertexSourceTGraph = verticesList.begin();
+            advance(itVertexSourceTGraph, vertexNeighbor->getData()-1);
+
+            (*itVertexSourceTGraph)->addNeighbor(*itVertexDestinationTGraph);
+            this->numOfEdges++;
 		}
 	}
-
-	return transposedGraph;
 }
 
 simpleGraph& simpleGraph::makeSuperGraphKSAlgo()
 {
 	// DFS on G Graph & build endList
-	list<int> endList = this->DFSEndList();
+	list<int> endList;
+    this->DFSEndList(endList);
+    endList.reverse();
 
 	// Build G transpose
-	simpleGraph transposedGraph = this->makeTransposeGraph();
+	simpleGraph transposedGraph;
+    transposedGraph.makeTransposeGraphFrom(this);
 
 	// DFS on G transpose with reversed endList
 	simpleGraph* superGraph = new simpleGraph();
 	superGraph->makeEmptyGraph(0);
-	list<tree*> treesListOfTransGraph = transposedGraph.DFSTrees(endList, *superGraph);
+	transposedGraph.DFSWithEndListToSuperGraph(endList, *superGraph);
 
 	return *superGraph;
 }
@@ -246,12 +220,21 @@ void simpleGraph::printGraph()
 
 	for (auto& currentVertex : verticesList)
 	{
-		cout << "Vertex " << currentVertex.getData() << " has edges to: ";
-		set<vertex*> edges = currentVertex.getEdgesList();
+		cout << "Vertex " << currentVertex->getData() << " has edges to: ";
+		list<vertex*> edges = currentVertex->getEdgesList();
 		for (const auto& neighbor : edges)
 		{
 			cout << neighbor->getData() << " ";
 		}
-		cout << std::endl;
+		cout << endl;
 	}
+}
+
+simpleGraph:: ~simpleGraph()
+{
+    for (auto currentVertex : verticesList)
+    {
+        delete currentVertex;
+    }
+    verticesList.clear();
 }

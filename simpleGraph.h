@@ -1,33 +1,35 @@
 #ifndef SUPER_GRAPH_ALGORITHM_ASSIGNMENT_SIMPLE_GRAPH_H
 #define SUPER_GRAPH_ALGORITHM_ASSIGNMENT_SIMPLE_GRAPH_H
 
+#include "vertex.h"
 #include <list>
 #include <iostream>
-#include "tree.h"
-#include "vertex.h"
-
 using namespace std;
 
 class simpleGraph{
 private:
-    int numOfVertices; // n
-    int numOfEdges; // m
-    list<vertex> verticesList;
+    int numOfVertices;
+    int numOfEdges;
+    list<vertex*> verticesList;
 
 public:
     void makeEmptyGraph(int numOfVertices);
-    void addVertex(int i);
+    void addVertex(vertex& vertexToAdd);
+    vertex* findVertexByValue(int value);
     void makeWhiteGraph();
-    bool isAdjacent(int vertexSource,int vertexDestination);
-    void addEdge(int vertexSourceValue, int vertexDestinationValue);
-    bool removeEdge(int vertexSourceValue, int vertexDestinationValue);
-    list<int> DFSEndList();
+    static bool isAdjacent(vertex& vertexSource, vertex& vertexDestination);
+    bool addEdgeUI(int vertexSourceValue, int vertexDestinationValue);
+    bool addEdge(vertex& vertexSource, vertex& vertexDestination);
+    bool removeEdge(vertex& vertexSource, vertex& vertexDestination);
+    void DFSEndList(list<int>& endList);
     void visitVertexAddToList(vertex &currentVertex, list<int>& endList);
-    list<tree*> DFSTrees(list<int> listWorkingOrder, simpleGraph& superGraph);
-    void visitVertexAddToTree(vertex& currentVertex, node& currentVertexNode, int rootValue, simpleGraph& superGraph);
-    simpleGraph makeTransposeGraph();
+    void DFSWithEndListToSuperGraph(list<int>& listWorkingOrder, simpleGraph& superGraph);
+    void visitVertexAddToSuperGraph(vertex& fatherVertex, vertex& RootVertexInSuper, simpleGraph& superGraph);
+    void makeTransposeGraphFrom(simpleGraph* sourceGraph);
     simpleGraph& makeSuperGraphKSAlgo();
     void printGraph();
+    simpleGraph() = default;
+    ~simpleGraph();
 };
 
 
